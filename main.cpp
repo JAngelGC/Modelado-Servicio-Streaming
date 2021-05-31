@@ -77,10 +77,10 @@ vector<Pelicula *> cargarPeliculas()
             peliculas.push_back(p);
         }
 
-        for(int i= 0;i < peliculas.size(); i++)
-        {
-            cout << peliculas[i]->muestraDatos()<<endl;
-        }
+        // for(int i= 0;i < peliculas.size(); i++)
+        // {
+        //     cout << peliculas[i]->muestraDatos()<<endl;
+        // }
     }
 
     return peliculas;
@@ -153,6 +153,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
             series[i].setEpisodios(episodios_Serie);
         }
 
+        
         // cout << "Series y Episodios:\n"<< "Series:\n" <<endl;
 
         // for(int i= 0;i < series.size(); i++)
@@ -166,8 +167,10 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
         //     }
 
         //     cout << endl;
-        // }
+        // }   
     }
+
+    return episodios;
 }
 
 vector<Video *> cargarVideos(vector<Pelicula *> peliculas,vector<Episodio *> episodios)
@@ -176,13 +179,13 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas,vector<Episodio *> epi
     videos.reserve(peliculas.size()+ episodios.size());
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
-
+    return videos;
     // cout << "Videos:\n" << endl;
     // for(int i = 0; i < videos.size(); i++)
     // {
     //     cout << videos[i]->muestraDatos();
     // }
-    // return videos;
+    
 }
 
 int main(){
