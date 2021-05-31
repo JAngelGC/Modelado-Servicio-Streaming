@@ -11,6 +11,6 @@ class Pelicula: public Video
     public:
     Pelicula(string,string,string,string,double);
     virtual string muestraDatos();
-    virtual ~Pelicula();
+    // virtual ~Pelicula();
 
 };

@@ -21,7 +21,7 @@ class Video
     double getCalificacion(); 
     void setCalificacion(double);
     virtual string muestraDatos() = 0;
-    virtual ~Video(); 
+    // virtual ~Video(); 
 
 };
 

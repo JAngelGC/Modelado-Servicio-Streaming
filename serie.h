@@ -15,13 +15,14 @@ class Serie{
         vector <Episodio *> m_episodios;
 
     public:
-        Serie(string, string, string, int, vector <Episodio *>);
+        Serie(string, string, string, int);
         string getID();
         string getNombre();
         string getGenero();
         int getTemporadas();
         vector<Episodio *> getEpisodios();
-        string mostrarEpisodios();
+        void setEpisodios(vector<Episodio *>);
+        void mostrarEpisodios();
         string mostrarDatos();
 
 

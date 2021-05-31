@@ -13,6 +13,6 @@ class Episodio : public Video{
         Episodio(string,string,string,string,double,int);
         int getTemporada();
         virtual string muestraDatos();
-        virtual ~Episodio();
+        // virtual ~Episodio();
 
 };

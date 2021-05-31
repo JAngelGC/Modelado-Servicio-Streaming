@@ -16,7 +16,7 @@ int Episodio::getTemporada(){
 }
 
 string Episodio::muestraDatos(){
-    string var_mostrar = "Mostrando datos de episodio";
+    string var_mostrar = "Nombre del Episodio: " + m_nombre + ", " + "Duracion: " + m_duracion + " minutos, " + "Genero: " + m_genero + ", " + "Calificacion: " + to_string(m_calificacion) + ", Temporada: " + to_string(m_temporada) + "\n";
     return var_mostrar;
 }
 
