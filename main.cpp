@@ -137,6 +137,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
         // }
 
         //Asignar Episodios a Series (composicion de clase Serie);
+
         for(int i= 0;i < series.size(); i++)
         {
             vector<Episodio *> episodios_Serie;
@@ -179,12 +180,14 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas,vector<Episodio *> epi
     videos.reserve(peliculas.size()+ episodios.size());
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
+    
+    cout << "Videos:\n" << endl;
+    for(int i = 0; i < videos.size(); i++)
+    {
+        cout << videos[i]->muestraDatos();
+    }
+
     return videos;
-    // cout << "Videos:\n" << endl;
-    // for(int i = 0; i < videos.size(); i++)
-    // {
-    //     cout << videos[i]->muestraDatos();
-    // }
     
 }
 
