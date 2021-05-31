@@ -11,24 +11,13 @@
 
 using namespace std;
 
-void cargarArchivos()
+vector<Serie> cargarSeries()
 {
-    
     vector<Serie> series;
-    vector<Pelicula *> peliculas;
-    vector<Episodio *> episodios;
-    vector<Video *> videos;
-
     string str;
     string file = "ProyectoIntegrador-Series.csv";
-    string file1 = "ProyectoIntegrador-Peliculas.csv";
-    string file2 = "ProyectoIntegrador-Episodios.csv";
-
     ifstream s(file);
-    ifstream s1(file1);
-    ifstream s2(file2);
 
-    //Crear vector con Series sin asignar episodios
     if (s.is_open())
     {
         while(getline(s, str))
@@ -56,7 +45,16 @@ void cargarArchivos()
         // }
     }
 
-    //Crear vector con Peliculas
+    return series;
+}
+
+vector<Pelicula *> cargarPeliculas()
+{
+    vector<Pelicula *> peliculas;
+    string str;
+    string file1 = "ProyectoIntegrador-Peliculas.csv";
+    ifstream s1(file1);
+
     if (s1.is_open())
     {
         while(getline(s1, str))
@@ -79,13 +77,22 @@ void cargarArchivos()
             peliculas.push_back(p);
         }
 
-        // for(int i= 0;i < peliculas.size(); i++)
-        // {
-        //     cout << peliculas[i]->muestraDatos()<<endl;
-        // }
+        for(int i= 0;i < peliculas.size(); i++)
+        {
+            cout << peliculas[i]->muestraDatos()<<endl;
+        }
     }
 
-    //Crear vector con Episodios
+    return peliculas;
+}
+
+vector<Episodio *> cargarEpisodios(vector<Serie> series)
+{
+    vector<Episodio *> episodios;
+    string str;
+    string file2 = "ProyectoIntegrador-Episodios.csv";
+    ifstream s2(file2);
+
     if (s2.is_open())
     {
         while(getline(s2, str))
@@ -161,22 +168,34 @@ void cargarArchivos()
         //     cout << endl;
         // }
     }
+}
 
-    //Crear vector con Videos (Peliculas y Episodios)
+vector<Video *> cargarVideos(vector<Pelicula *> peliculas,vector<Episodio *> episodios)
+{
+    vector<Video *> videos;
     videos.reserve(peliculas.size()+ episodios.size());
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
 
-    cout << "Videos:\n" << endl;
-    for(int i = 0; i < videos.size(); i++)
-    {
-        cout << videos[i]->muestraDatos();
-    }
+    // cout << "Videos:\n" << endl;
+    // for(int i = 0; i < videos.size(); i++)
+    // {
+    //     cout << videos[i]->muestraDatos();
+    // }
+    // return videos;
 }
 
 int main(){
 
-    cargarArchivos();
+    vector<Serie> series;
+    vector<Pelicula *> peliculas;
+    vector<Episodio *> episodios;
+    vector<Video *> videos;
+
+    series = cargarSeries();
+    peliculas = cargarPeliculas();
+    episodios = cargarEpisodios(series);
+    videos = cargarVideos(peliculas, episodios);
 
     return 0;
 }
