@@ -8,7 +8,6 @@
 #include <fstream>
 #include <string.h>
 
-
 using namespace std;
 
 vector<Serie> cargarSeries()
@@ -20,21 +19,21 @@ vector<Serie> cargarSeries()
 
     if (s.is_open())
     {
-        while(getline(s, str))
+        while (getline(s, str))
         {
             stringstream ss(str);
             string line[4];
 
             int i = 0;
 
-            while(i < 4 && getline(ss,line[i++],';'));
+            while (i < 4 && getline(ss, line[i++], ';'))
+                ;
 
             Serie s(
                 line[0],
                 line[1],
                 line[2],
-                stoi(line[3])
-            );
+                stoi(line[3]));
 
             series.push_back(s);
         }
@@ -57,22 +56,22 @@ vector<Pelicula *> cargarPeliculas()
 
     if (s1.is_open())
     {
-        while(getline(s1, str))
+        while (getline(s1, str))
         {
             stringstream ss(str);
             string line[5];
 
             int i = 0;
 
-            while(i < 5 && getline(ss,line[i++],';'));
+            while (i < 5 && getline(ss, line[i++], ';'))
+                ;
 
             Pelicula *p = new Pelicula(
                 line[0],
                 line[1],
                 line[2],
                 line[3],
-                stod(line[4])
-            );
+                stod(line[4]));
 
             peliculas.push_back(p);
         }
@@ -95,14 +94,15 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
 
     if (s2.is_open())
     {
-        while(getline(s2, str))
+        while (getline(s2, str))
         {
             stringstream ss(str);
             string line[6];
 
             int i = 0;
 
-            while(i < 6 && getline(ss,line[i++],';'));
+            while (i < 6 && getline(ss, line[i++], ';'))
+                ;
 
             Episodio *ep = new Episodio(
                 line[0],
@@ -110,20 +110,19 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
                 line[2],
                 line[3],
                 stod(line[4]),
-                stoi(line[5])
-            );
+                stoi(line[5]));
 
             episodios.push_back(ep);
         }
 
         //Asignar genero a Episodios (composicion de clase Serie)
-        for(int i= 0;i < series.size(); i++)
+        for (int i = 0; i < series.size(); i++)
         {
-            for(int j=0;j < episodios.size();j++)
+            for (int j = 0; j < episodios.size(); j++)
             {
                 string epId = episodios[j]->getID();
                 string sId = series[i].getID();
-                if(epId == sId)
+                if (epId == sId)
                 {
                     string g = series[i].getGenero();
                     episodios[j]->setGenero(g);
@@ -138,70 +137,213 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
 
         //Asignar Episodios a Series (composicion de clase Serie);
 
-        for(int i= 0;i < series.size(); i++)
+        for (int i = 0; i < series.size(); i++)
         {
             vector<Episodio *> episodios_Serie;
-            for(int j=0;j < episodios.size();j++)
+            for (int j = 0; j < episodios.size(); j++)
             {
                 string epId = episodios[j]->getID();
                 string sId = series[i].getID();
-                if(epId == sId)
+                if (epId == sId)
                 {
                     episodios_Serie.push_back(episodios[j]);
                 }
             }
-            
+
             series[i].setEpisodios(episodios_Serie);
         }
 
-        
         // cout << "Series y Episodios:\n"<< "Series:\n" <<endl;
 
         // for(int i= 0;i < series.size(); i++)
         // {
         //     cout << series[i].getNombre() << ":\n";
         //     vector<Episodio *> episodios = series[i].getEpisodios();
-            
+
         //     for(int j = 0; j < episodios.size();j++)
         //     {
         //         cout << episodios[j]->muestraDatos();
         //     }
 
         //     cout << endl;
-        // }   
+        // }
     }
 
     return episodios;
 }
 
-vector<Video *> cargarVideos(vector<Pelicula *> peliculas,vector<Episodio *> episodios)
+vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> episodios)
 {
     vector<Video *> videos;
-    videos.reserve(peliculas.size()+ episodios.size());
+    videos.reserve(peliculas.size() + episodios.size());
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
-    
-    cout << "Videos:\n" << endl;
-    for(int i = 0; i < videos.size(); i++)
-    {
-        cout << videos[i]->muestraDatos();
-    }
+
+    // cout << "Videos:\n" << endl;
+    // for(int i = 0; i < videos.size(); i++)
+    // {
+    //     cout << videos[i]->muestraDatos();
+    // }
 
     return videos;
-    
 }
 
-int main(){
+//Funcion para aceptar solo int's
+// int forzarInt() {
+//   int valInt;
+//   cin >> valInt;
+
+//   while (true) {
+//     if (cin.fail()){
+//       cin.clear();
+//       cin.ignore(numeric_limits<streamsize>::max(), '\n');
+//       cout << "--Ingresar solo valores numericos. Trata de nuevo--\n";
+//       cin >> valInt;
+//       cout << endl;
+//     }
+//     else{
+//       return valInt;
+//       break;
+//     }
+//     }
+// }
+
+// //Funcion para verificar el rango de un valor
+// int verificarRango(int valor, int menor, int mayor){
+//   while(1){
+//     valor = forzarInt();
+//     if(valor>=menor && valor<=mayor){
+//       break;
+//     }else{
+//       cout << "Valor ingresado fuera del rango. Intenta de nuevo" <<endl;
+//     }
+//   }
+//   return valor;
+// }
+
+int main()
+{
 
     vector<Serie> series;
     vector<Pelicula *> peliculas;
     vector<Episodio *> episodios;
     vector<Video *> videos;
 
-    series = cargarSeries();
-    peliculas = cargarPeliculas();
-    episodios = cargarEpisodios(series);
-    videos = cargarVideos(peliculas, episodios);
+    bool ciclarMenu = 1;
+    int hayArchivos = 0;
+    while (ciclarMenu)
+    {
+
+        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********";
+        cout << "Texto de bienvenida" << endl;
+
+        // int *ptr_archivos = &hayArchivos;
+        cout << "1. Cargar archivo de datos" << endl;
+        cout << "2. Mostrar los videos en general con una cierta calificación o de un cierto género" << endl;
+        cout << "3. Mostrar los episodios de una determinada serie con una calificacion determinada" << endl;
+        cout << "4. Mostrar las películas con cierta calificacion" << endl;
+        cout << "5. Calificar un video" << endl;
+        cout << "6. Salir" << endl;
+
+        cout << "Ingresa la opcion del menu que te interese: ";
+        // int opcion = forzarInt();
+        int opcion;
+        cin >> opcion;
+
+        cout << "Valor de hayArchivos: " << hayArchivos << endl;
+        if (opcion == 1)
+        {
+            cout << "Estas en la opcion 1" << endl;
+            series = cargarSeries();
+            peliculas = cargarPeliculas();
+            episodios = cargarEpisodios(series);
+            videos = cargarVideos(peliculas, episodios);
+            hayArchivos = 1;
+        }
+        else if (opcion == 2)
+        {
+            if (hayArchivos == 1)
+            {
+                cout << "Estas en la opcion 2" << endl;
+                // Ejecurando esta parte
+                // Preguntar si lo quieres ver con genero o por calificacion
+                // 1 Genero
+                // 2 Calif
+                // crear un metodo sobrecargado que recibe una entrada que puede ser genero(string) o calificacion(double)
+                // Si es genero, mostrar los generos disponibles
+                // A lo mejor crear variables para cada genero
+                // empezar iteracion
+                // Llamar al vector videos en el caso del string buscar el getGenero y verificarlo con la entrada
+                // Crear un vector tempoarl para guardar todos los videos que cumplen el igual
+                // Mostrar el vector temporal
+                // Hacer lo correspondiente con calificacion, y manejar los limites de calificacion (decir que solo un decimal)
+                // Si no hay ningun video, imprimir que no hay resultados
+            }
+            else
+            {
+                cout << "No han cargado los archivos" << endl;
+            }
+        }
+        else if (opcion == 3)
+        {
+            if (hayArchivos)
+            {
+                cout << "Estas en la opcion 3" << endl;
+                // Preguntar que serie quiere ver
+                // Mostrar en que serie estamos
+                // Preguntar la calificacion de los episodios que quiere ver
+                // getEpisodios() regresar el vector de episodios de la serie
+                // iterar en el vector la calificacion que ingresen
+                // usar un vector temporal y guardar los episodios que cumplen la condicion
+                // mostrar ese vector con un loop
+                // Mostrar nada si no hay
+            }
+            else
+            {
+                cout << "No han cargado los archivos" << endl;
+            }
+        }
+        else if (opcion == 4)
+        {
+            if (hayArchivos)
+            {
+                cout << "Estas en la opcion 4" << endl;
+                // Preguntar la calificacion de la pelicula que quiere ver
+                // llamar al vector peliculas y hacer un loop para verficar que lo que ingrese cumpla con una pelicula
+                // ir guardando las peliculas que cumplan con la condicion en un vector temporal
+                // mostrar dicho vector tempoarl
+                // mostrar que no hay peliculas que cumplan con esa calificacion en caso contrario
+            }
+            else
+            {
+                cout << "No han cargado los archivos" << endl;
+            }
+        }
+        else if (opcion == 5)
+        {
+            if (hayArchivos)
+            {
+                cout << "Estas en la opcion 5" << endl;
+                // Preguntar si serie o pelicula
+                // mostrar lo que sea el caso
+                // guardar el episodio que indique el usuario mediante el uso de getId
+                // Usar lo de loslimites para manejar el rango de la calificacion
+                // usar un loop para buscar el ID en el vector videos y cyando lo encuentre, usar un setCalificacion
+                // Actualizar la calificacion en el archivo .csv (REVISAR)
+            }
+            else
+            {
+                cout << "No han cargado los archivos" << endl;
+            }
+        } else if(opcion==6){
+            ciclarMenu = 0;
+
+        } else{
+            cout << "Valor ingresado invalida" << endl;
+            cout << "Trata de nuevo" << endl;  
+        }
+
+    } // Cierre del ciclo del menu principal
 
     return 0;
 }
