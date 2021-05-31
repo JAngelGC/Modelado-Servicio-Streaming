@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Serie.h"
 
 using namespace std;
 
