@@ -14,6 +14,14 @@ class Persona{
     friend void friendFunction(Persona &alguien);
 };
 
+class Archivo{
+
+    private:
+        int address;
+    public:
+        int getAdress(){return address;}
+
+};
 
 void friendFunction(Persona &alguien){
     alguien.edad = 99;
