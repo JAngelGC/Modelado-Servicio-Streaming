@@ -1,16 +1,17 @@
 #pragma once
 #include <iostream>
+#include "video.h"
 
 using namespace std;
 
-class Episodio : public {
+class Episodio : public Video{
     
     protected:
         int m_temporada;
 
     public:
-        Episodio(string,string,double,string,int,string,int);
-        string getTemporada();
+        Episodio(string,string,string,string,double,int);
+        int getTemporada();
         virtual string muestraDatos();
         virtual ~Episodio();
 

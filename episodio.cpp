@@ -7,15 +7,15 @@ Episodio::Episodio(string id, string nombre, string duracion, string genero, dou
     m_duracion = duracion;
     m_genero = genero;
     m_calificacion = calificacion;
-    m_temporada = tempoarada;
+    m_temporada = temporada;
 
 }
 
-string getTemporada(){
+int Episodio::getTemporada(){
     return m_temporada;
 }
 
-string muestraDatos(){
+string Episodio::muestraDatos(){
     string var_mostrar = "Mostrando datos de episodio";
     return var_mostrar;
 }

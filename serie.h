@@ -12,15 +12,15 @@ class Serie{
         string m_nombre;
         string m_genero;
         int m_temporadas;
-        vector <Episodios *> m_episodios;
+        vector <Episodio *> m_episodios;
 
     public:
-        Serie(string, string, string, int, vector <Episodio>);
+        Serie(string, string, string, int, vector <Episodio *>);
         string getID();
         string getNombre();
         string getGenero();
         int getTemporadas();
-        vector<Episodio> getEpisodios();
+        vector<Episodio *> getEpisodios();
         string mostrarEpisodios();
         string mostrarDatos();
 
