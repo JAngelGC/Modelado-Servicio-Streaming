@@ -1,4 +1,5 @@
 #include "serie.h"
+#include <vector>
 
 Serie::Serie(string id, string nombre, string genero, int temporadas){
     m_id = id;
@@ -31,15 +32,17 @@ void Serie::setEpisodios(vector<Episodio *> episodios){
     m_episodios = episodios;
 }
 
-void Serie::mostrarEpisodios(){
+string Serie::mostrarEpisodios(){
+    
+    string str;
     for(auto episodio_ptr: m_episodios)
     {
-        cout << episodio_ptr -> muestraDatos() << endl;
+        str = episodio_ptr -> muestraDatos();
     }
-
+    return str; 
 }
 
 string Serie::mostrarDatos(){
-    string var_mostrar = m_id + " / " + m_nombre + " / " + m_genero + " / " + " / " + to_string(m_temporadas) + "\n";
+    string var_mostrar =  "Nombre de la serie: " + m_nombre + ", Genero: " + m_genero + ", Temporadas: " + to_string(m_temporadas) + "\n";
     return var_mostrar;
 }

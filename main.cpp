@@ -1,36 +1,182 @@
 #include <iostream>
+#include <vector>
 #include "serie.cpp"
 #include "episodio.cpp"
 #include "video.cpp"
 #include "pelicula.cpp"
+#include <sstream>
+#include <fstream>
+#include <string.h>
 
 
 using namespace std;
 
+void cargarArchivos()
+{
+    
+    vector<Serie> series;
+    vector<Pelicula *> peliculas;
+    vector<Episodio *> episodios;
+    vector<Video *> videos;
+
+    string str;
+    string file = "ProyectoIntegrador-Series.csv";
+    string file1 = "ProyectoIntegrador-Peliculas.csv";
+    string file2 = "ProyectoIntegrador-Episodios.csv";
+
+    ifstream s(file);
+    ifstream s1(file1);
+    ifstream s2(file2);
+
+    //Crear vector con Series sin asignar episodios
+    if (s.is_open())
+    {
+        while(getline(s, str))
+        {
+            stringstream ss(str);
+            string line[4];
+
+            int i = 0;
+
+            while(i < 4 && getline(ss,line[i++],';'));
+
+            Serie s(
+                line[0],
+                line[1],
+                line[2],
+                stoi(line[3])
+            );
+
+            series.push_back(s);
+        }
+
+        // for(int i= 0;i < series.size(); i++)
+        // {
+        //     cout << series[i].mostrarDatos()<<endl;;
+        // }
+    }
+
+    //Crear vector con Peliculas
+    if (s1.is_open())
+    {
+        while(getline(s1, str))
+        {
+            stringstream ss(str);
+            string line[5];
+
+            int i = 0;
+
+            while(i < 5 && getline(ss,line[i++],';'));
+
+            Pelicula *p = new Pelicula(
+                line[0],
+                line[1],
+                line[2],
+                line[3],
+                stod(line[4])
+            );
+
+            peliculas.push_back(p);
+        }
+
+        // for(int i= 0;i < peliculas.size(); i++)
+        // {
+        //     cout << peliculas[i]->muestraDatos()<<endl;
+        // }
+    }
+
+    //Crear vector con Episodios
+    if (s2.is_open())
+    {
+        while(getline(s2, str))
+        {
+            stringstream ss(str);
+            string line[6];
+
+            int i = 0;
+
+            while(i < 6 && getline(ss,line[i++],';'));
+
+            Episodio *ep = new Episodio(
+                line[0],
+                line[1],
+                line[2],
+                line[3],
+                stod(line[4]),
+                stoi(line[5])
+            );
+
+            episodios.push_back(ep);
+        }
+
+        //Asignar genero a Episodios (composicion de clase Serie)
+        for(int i= 0;i < series.size(); i++)
+        {
+            for(int j=0;j < episodios.size();j++)
+            {
+                string epId = episodios[j]->getID();
+                string sId = series[i].getID();
+                if(epId == sId)
+                {
+                    string g = series[i].getGenero();
+                    episodios[j]->setGenero(g);
+                }
+            }
+        }
+
+        // for(int i= 0;i < episodios.size(); i++)
+        // {
+        //     cout << episodios[i]->muestraDatos()<<endl;;
+        // }
+
+        //Asignar Episodios a Series (composicion de clase Serie);
+        for(int i= 0;i < series.size(); i++)
+        {
+            vector<Episodio *> episodios_Serie;
+            for(int j=0;j < episodios.size();j++)
+            {
+                string epId = episodios[j]->getID();
+                string sId = series[i].getID();
+                if(epId == sId)
+                {
+                    episodios_Serie.push_back(episodios[j]);
+                }
+            }
+            
+            series[i].setEpisodios(episodios_Serie);
+        }
+
+        // cout << "Series y Episodios:\n"<< "Series:\n" <<endl;
+
+        // for(int i= 0;i < series.size(); i++)
+        // {
+        //     cout << series[i].getNombre() << ":\n";
+        //     vector<Episodio *> episodios = series[i].getEpisodios();
+            
+        //     for(int j = 0; j < episodios.size();j++)
+        //     {
+        //         cout << episodios[j]->muestraDatos();
+        //     }
+
+        //     cout << endl;
+        // }
+    }
+
+    //Crear vector con Videos (Peliculas y Episodios)
+    videos.reserve(peliculas.size()+ episodios.size());
+    videos.insert(videos.end(), peliculas.begin(), peliculas.end());
+    videos.insert(videos.end(), episodios.begin(), episodios.end());
+
+    cout << "Videos:\n" << endl;
+    for(int i = 0; i < videos.size(); i++)
+    {
+        cout << videos[i]->muestraDatos();
+    }
+}
 
 int main(){
 
-    vector<Episodio *> episodios;
-    episodios[0] = new Episodio(
-        "20110125-S01E01",
-        "Winter is coming",
-        "1:02",
-        "Drama",
-        7.8,
-        2
-    );
-
-    
-    Serie s1(
-        "20110125",
-        "Game of Thrones",
-        "Drama",
-        8);
-    
-    s1.mostrarDatos();
-
-    s1.setEpisodios(episodios);
-    s1.mostrarEpisodios();
+    cargarArchivos();
 
     return 0;
 }

@@ -22,7 +22,7 @@ class Serie{
         int getTemporadas();
         vector<Episodio *> getEpisodios();
         void setEpisodios(vector<Episodio *>);
-        void mostrarEpisodios();
+        string mostrarEpisodios();
         string mostrarDatos();
 
 

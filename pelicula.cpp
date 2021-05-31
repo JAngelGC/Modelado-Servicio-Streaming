@@ -14,6 +14,6 @@ Pelicula::Pelicula(string id, string nombre,string duracion,string genero, doubl
 
 string Pelicula::muestraDatos()
 {
-    string str = "Pelicula: " + m_nombre + ", " + "Duracion: " + m_duracion + " minutos, " + "Genero: " + m_genero + ", " + "Calificacion: " + to_string(m_calificacion) + "\n";
+    string str = "Nombre de la Pelicula: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + to_string(m_calificacion) + "\n";
     return str;
 }
