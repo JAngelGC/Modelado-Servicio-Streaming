@@ -24,11 +24,11 @@ int Serie::getTemporadas(){
     return m_temporadas;
 }
 
-vector<Episodio *> Serie::getEpisodios(){
+vector<Video *> Serie::getEpisodios(){
     return m_episodios;
 }
 
-void Serie::setEpisodios(vector<Episodio *> episodios){
+void Serie::setEpisodios(vector<Video *> episodios){
     m_episodios = episodios;
 }
 
