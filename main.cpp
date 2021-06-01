@@ -63,15 +63,14 @@ vector<Pelicula *> cargarPeliculas()
 
             int i = 0;
 
-            while (i < 5 && getline(ss, line[i++], ';'))
-                ;
+            while (i < 5 && getline(ss, line[i++], ';'));
 
             Pelicula *p = new Pelicula(
                 line[0],
                 line[1],
                 line[2],
                 line[3],
-                stod(line[4]));
+                line[4]);
 
             peliculas.push_back(p);
         }
@@ -85,7 +84,7 @@ vector<Pelicula *> cargarPeliculas()
     return peliculas;
 }
 
-vector<Episodio *> cargarEpisodios(vector<Serie> series)
+vector<Episodio *> cargarEpisodios(vector<Serie>& series)
 {
     vector<Episodio *> episodios;
     string str;
@@ -109,7 +108,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
                 line[1],
                 line[2],
                 line[3],
-                stod(line[4]),
+                line[4],
                 stoi(line[5]));
 
             episodios.push_back(ep);
@@ -120,7 +119,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
         {
             for (int j = 0; j < episodios.size(); j++)
             {
-                string epId = episodios[j]->getID();
+                string epId = episodios[j]->getIdSerie();
                 string sId = series[i].getID();
                 if (epId == sId)
                 {
@@ -142,7 +141,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
             vector<Episodio *> episodios_Serie;
             for (int j = 0; j < episodios.size(); j++)
             {
-                string epId = episodios[j]->getID();
+                string epId = episodios[j]->getIdSerie();
                 string sId = series[i].getID();
                 if (epId == sId)
                 {
@@ -221,6 +220,28 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 //   return valor;
 // }
 
+void modificarArchivoEpisodios(vector<Episodio *> v)
+{
+    ofstream ofs("ProyectoIntegrador-Episodios.csv", ofstream::trunc);
+    for(int i = 0; i < v.size();i++)
+    {
+        string str = v[i]->getIdSerie() + ";" + v[i]->getID() + ";" + v[i]->getNombre() + ";" + v[i]->getDuracion() + ";" + v[i]->getCalificacion() + ";" + to_string(v[i]->getTemporada()) + "\n";
+        ofs << str;
+    }
+    ofs.close();
+}
+
+void modificarArchivoPeliculas(vector<Pelicula *> v)
+{
+    ofstream ofs("ProyectoIntegrador-Peliculas.csv", ofstream::trunc);
+    for(int i = 0; i < v.size();i++)
+    {
+        string str = v[i]->getID() + ";" + v[i]->getNombre() + ";" + v[i]->getDuracion() + ";" + v[i]->getGenero() + ";" + v[i]->getCalificacion() + "\n";
+        ofs << str;
+    }
+    ofs.close();
+}
+
 int main()
 {
 
@@ -234,14 +255,14 @@ int main()
     while (ciclarMenu)
     {
 
-        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********";
+        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********" << endl;
         cout << "Texto de bienvenida" << endl;
 
         // int *ptr_archivos = &hayArchivos;
         cout << "1. Cargar archivo de datos" << endl;
-        cout << "2. Mostrar los videos en general con una cierta calificación o de un cierto género" << endl;
+        cout << "2. Mostrar los videos en general con una cierta calificacion o de un cierto genero" << endl;
         cout << "3. Mostrar los episodios de una determinada serie con una calificacion determinada" << endl;
-        cout << "4. Mostrar las películas con cierta calificacion" << endl;
+        cout << "4. Mostrar las peliculas con cierta calificacion" << endl;
         cout << "5. Calificar un video" << endl;
         cout << "6. Salir" << endl;
 
@@ -250,13 +271,21 @@ int main()
         int opcion;
         cin >> opcion;
 
-        cout << "Valor de hayArchivos: " << hayArchivos << endl;
+        // cout << "Valor de hayArchivos: " << hayArchivos << endl;
         if (opcion == 1)
         {
             cout << "Estas en la opcion 1" << endl;
             series = cargarSeries();
+            for (int i =0; i < series.size();i++)
+            {
+                cout<< "Serie: " << series[i].getNombre() << " ,Episodios: " << series[i].getEpisodios().size() <<endl;
+            }
             peliculas = cargarPeliculas();
             episodios = cargarEpisodios(series);
+            for (int i =0; i < series.size();i++)
+            {
+                cout<< "Serie: " << series[i].getNombre() << " ,Episodios: " << series[i].getEpisodios().size() <<endl;
+            }
             videos = cargarVideos(peliculas, episodios);
             hayArchivos = 1;
         }
@@ -309,10 +338,34 @@ int main()
             {
                 cout << "Estas en la opcion 4" << endl;
                 // Preguntar la calificacion de la pelicula que quiere ver
-                // llamar al vector peliculas y hacer un loop para verficar que lo que ingrese cumpla con una pelicula
-                // ir guardando las peliculas que cumplan con la condicion en un vector temporal
-                // mostrar dicho vector tempoarl
-                // mostrar que no hay peliculas que cumplan con esa calificacion en caso contrario
+               
+                double calif;
+                cout << "Introduce la calificacion a buscar: ";
+                cin >> calif;
+                
+                vector<Pelicula *> temp;
+                for(int i = 0;i< peliculas.size();i++)
+                {
+                    // llamar al vector peliculas y hacer un loop para verficar que lo que ingrese cumpla con una pelicula
+                    if(stod(peliculas[i]->getCalificacion()) == calif)
+                    {
+                         // ir guardando las peliculas que cumplan con la condicion en un vector temporal
+                        temp.push_back(peliculas[i]);
+                    }
+                }
+
+                if(temp.size() > 0)
+                {
+                    cout << "Estas son las peliculas con una calificacion de: " << calif << endl;
+                    for(int i = 0; i < temp.size();i++)
+                    {
+                        // mostrar dicho vector tempoarl
+                        cout << i+1 << ". Nombre de la Pelicula: " << temp[i]->getNombre() << ", Duracion: " << temp[i]->getDuracion() << " hrs, Genero: " << temp[i]->getGenero() << endl; 
+                    }
+                } else {
+                    // mostrar que no hay peliculas que cumplan con esa calificacion en caso contrario
+                    cout << "No se encontro ninguna pelicula con una calificacion de: " << calif << endl;
+                }         
             }
             else
             {
@@ -325,8 +378,85 @@ int main()
             {
                 cout << "Estas en la opcion 5" << endl;
                 // Preguntar si serie o pelicula
+                int opcionCalif;
+                cout << "Calificar:\n1. Episodio de una Serie\n2. Pelicula\n\nIngresa el numero de la opcion deseada: ";
+                cin >> opcionCalif;
                 // mostrar lo que sea el caso
-                // guardar el episodio que indique el usuario mediante el uso de getId
+                if(opcionCalif == 1)
+                {
+                    int serie;
+                    cout << "Estas son las series disponibles: " << endl;
+                    for(int i = 0; i < series.size(); i++)
+                    {
+                        cout << i+1 << ". " << series[i].getNombre() << endl;
+                    }
+                    cout << "Elige la opcion de tu gusto: ";
+                    cin >> serie;
+                    cout << "Estos son los episodios de " << series[serie-1].getNombre() <<": "<< endl;
+                    // cout << series[serie-1].getEpisodios().size()<< endl;
+                    vector <Episodio *> temp = series[serie-1].getEpisodios();
+                    for(int i = 0; i < temp.size(); i++)
+                    {
+                        cout << i+1 << ". " << temp[i]->getNombre() << ", Calificacion: "<< temp[i]->getCalificacion() << endl;
+                    }
+                    int episodio;
+                    cout << "Elige el episodio  a calificar: ";
+                    cin >> episodio;
+                    
+                    cout << "La calificacion actual del episodio es de: " << temp[episodio-1]->getCalificacion() << endl;
+                    string calificacion;
+                    cout << "Introduce la nueva calificacion: ";
+                    cin >> calificacion;
+                    series[serie -1].getEpisodios()[episodio-1]->setCalificacion(calificacion);
+                    
+                    modificarArchivoEpisodios(episodios);
+
+                    cout << "Los cambios se han realizado"<<endl;
+                    
+                    // cout << "La calificacion actualizada debería ser: " << calificacion << endl;
+                    
+                    // cout << "Vector Series"<<endl;
+                    // cout << "Calificacion: " << series[serie -1].getEpisodios()[episodio-1]->getCalificacion() << endl;
+                    // cout << "Vector Episodios"<<endl; 
+                    // for(int i = 0; i < episodios.size(); i++)
+                    // {
+                    //     if(episodios[i]->getID() == series[serie -1].getEpisodios()[episodio-1]->getID())
+                    //     {
+                    //         cout << "Calificacion: " << episodios[i]->getCalificacion() << endl;
+                    //     }
+                    // }
+                    
+                    // cout << "Vector Videos"<<endl; 
+                    // for(int i = 0; i < videos.size(); i++)
+                    // {
+                    //     if(videos[i]->getID() == series[serie -1].getEpisodios()[episodio-1]->getID())
+                    //     {
+                    //         cout << "Calificacion: " << videos[i]->getCalificacion() << endl;
+                    //     }
+                    // }
+
+                } else if(opcionCalif == 2)
+                {
+                    int pelicula;
+                    cout << "Estas son las peliculas disponibles: " << endl;
+                    for(int i = 0; i < peliculas.size(); i++)
+                    {
+                        cout << i+1 << ". " << peliculas[i]->getNombre() << ", Calificacion: "<< peliculas[i]->getCalificacion() << endl;
+                    }
+                    cout << "Elige la pelicula a calificar: ";
+                    cin >> pelicula;
+                    cout << "La calificacion actual de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
+                    string calificacion;
+                    cout << "Introduce la nueva calificacion: ";
+                    cin >> calificacion;
+                    peliculas[pelicula-1]->setCalificacion(calificacion);
+
+                    modificarArchivoPeliculas(peliculas);
+
+                    cout << "Los cambios se han realizado"<<endl;
+
+                } 
+                // guardar el episodio que indique el usuario mediante el uso de getId - "Enumeracion mejor"
                 // Usar lo de loslimites para manejar el rango de la calificacion
                 // usar un loop para buscar el ID en el vector videos y cyando lo encuentre, usar un setCalificacion
                 // Actualizar la calificacion en el archivo .csv (REVISAR)
@@ -335,12 +465,15 @@ int main()
             {
                 cout << "No han cargado los archivos" << endl;
             }
-        } else if(opcion==6){
+        }
+        else if (opcion == 6)
+        {
             ciclarMenu = 0;
-
-        } else{
+        }
+        else
+        {
             cout << "Valor ingresado invalida" << endl;
-            cout << "Trata de nuevo" << endl;  
+            cout << "Trata de nuevo" << endl;
         }
 
     } // Cierre del ciclo del menu principal

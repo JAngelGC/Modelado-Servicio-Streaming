@@ -11,15 +11,15 @@ class Video
     string m_nombre;
     string m_duracion;
     string m_genero;
-    double m_calificacion;
+    string m_calificacion;
 
     public:
-    string getID();
+    virtual string getID() = 0;
     string getNombre();
     string getDuracion();
     string getGenero();
-    double getCalificacion(); 
-    void setCalificacion(double);
+    string getCalificacion(); 
+    void setCalificacion(string);
     virtual string muestraDatos() = 0;
     // virtual ~Video(); 
 

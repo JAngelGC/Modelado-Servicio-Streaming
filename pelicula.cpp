@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Pelicula::Pelicula(string id, string nombre,string duracion,string genero, double calificacion)
+Pelicula::Pelicula(string id, string nombre,string duracion,string genero, string calificacion)
 {
     m_id = id;
     m_nombre = nombre;
@@ -12,8 +12,13 @@ Pelicula::Pelicula(string id, string nombre,string duracion,string genero, doubl
     m_calificacion = calificacion;
 }
 
+string Pelicula::getID()
+{
+    return m_id;
+}
+
 string Pelicula::muestraDatos()
 {
-    string str = "Nombre de la Pelicula: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + to_string(m_calificacion) + "\n";
+    string str = "Nombre de la Pelicula: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + m_calificacion + "\n";
     return str;
 }
