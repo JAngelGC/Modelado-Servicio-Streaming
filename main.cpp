@@ -7,9 +7,9 @@
 #include <sstream>
 #include <fstream>
 #include <string.h>
+#include <algorithm>
 
 #include <limits> // Aqui va el include para que funcione el forzarInt();
-// #undef max
 
 using namespace std;
 
@@ -40,11 +40,6 @@ vector<Serie> cargarSeries()
 
             series.push_back(s);
         }
-
-        // for(int i= 0;i < series.size(); i++)
-        // {
-        //     cout << series[i].mostrarDatos()<<endl;;
-        // }
     }
 
     return series;
@@ -78,10 +73,6 @@ vector<Pelicula *> cargarPeliculas()
             peliculas.push_back(p);
         }
 
-        // for(int i= 0;i < peliculas.size(); i++)
-        // {
-        //     cout << peliculas[i]->muestraDatos()<<endl;
-        // }
     }
 
     return peliculas;
@@ -118,7 +109,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie> &series)
             episodios.push_back(ep);
         }
 
-        //Asignar genero a Episodios (composicion de clase Serie)
+        //Asignar genero y serie a Episodios (composicion de clase Serie)
         for (int i = 0; i < series.size(); i++)
         {
             for (int j = 0; j < episodios.size(); j++)
@@ -128,15 +119,12 @@ vector<Episodio *> cargarEpisodios(vector<Serie> &series)
                 if (epId == sId)
                 {
                     string g = series[i].getGenero();
+                    string s = series[i].getNombre();
                     episodios[j]->setGenero(g);
+                    episodios[j]-> setSerie(s);
                 }
             }
         }
-
-        // for(int i= 0;i < episodios.size(); i++)
-        // {
-        //     cout << episodios[i]->muestraDatos()<<endl;;
-        // }
 
         //Asignar Episodios a Series (composicion de clase Serie);
 
@@ -155,23 +143,6 @@ vector<Episodio *> cargarEpisodios(vector<Serie> &series)
 
             series[i].setEpisodios(episodios_Serie);
         }
-
-        
-
-        // cout << "Series y Episodios:\n"<< "Series:\n" <<endl;
-
-        // for(int i= 0;i < series.size(); i++)
-        // {
-        //     cout << series[i].getNombre() << ":\n";
-        //     vector<Episodio *> episodios = series[i].getEpisodios();
-
-        //     for(int j = 0; j < episodios.size();j++)
-        //     {
-        //         cout << episodios[j]->muestraDatos();
-        //     }
-
-        //     cout << endl;
-        // }
     }
 
     return episodios;
@@ -181,25 +152,14 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 {
     vector<Video *> videos;
     videos.reserve(peliculas.size() + episodios.size());
-    //SOBRECARGA DE OPERADOS
-    //videos = peliculas + episodios;
-    //return = videos;
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
-
-    // cout << "Videos:\n" << endl;
-    // for(int i = 0; i < videos.size(); i++)
-    // {
-    //     cout << videos[i]->muestraDatos();
-    // }
 
     return videos;
 }
 
 // Se puede crear una funcion que guarde los generos
 // vector <string> cargarGeneros(vector<Video *> videos)
-
-//Funcion para aceptar solo int's
 
 //forzar tipo de dato (Sobrecarga)
 int forzarInt() {
@@ -324,12 +284,15 @@ int main()
                     string calificacion; // Variable que guarda la calificacion que el user desea buscar
                     cin >> calificacion;
 
-                    for(auto ptr_video : videos){ // Se itera en el ciclo en busca de la calificacion del user
-                        if(ptr_video->getCalificacion()==calificacion){
-                            videosAMostrar.push_back(ptr_video);
-                            hayVideos = 1; // Si hay videos
-                        } 
+                    
+                    for(int i=0; i < videos.size();i++){
+                        if (videos[i]->getCalificacion()==calificacion) // Se itera en el ciclo en busca de la calificacion del user
+                        {
+                            videosAMostrar.push_back(videos[i]);
+                            hayVideos = 1 ;// Si hay videos
+                        }
                     }
+
                 } 
                 else if(opcionMenu2==2){ // User escogio ver videos por genero
 
@@ -341,17 +304,21 @@ int main()
                     int genero;         // Se guarda el genero que haya escogido el user
                     genero = verificarRango(genero, 1, generos.size());
 
-                    for(auto ptr_video : videos){ // Se itera en el ciclo en busca el genero del user
-                        if(ptr_video->getGenero()==generos[genero-1])
-                            videosAMostrar.push_back(ptr_video);
-                            hayVideos = 1; // Si hay videos
+                    for(int i=0; i < videos.size();i++){
+                        if (videos[i]->getGenero()== generos[genero-1]) // Se itera en el ciclo en busca del genero del user
+                        {
+                            videosAMostrar.push_back(videos[i]);
+                            hayVideos = 1 ;// Si hay videos
+                        }
                     }
                 }
 
                 if(hayVideos==1){
-                    cout << "\nMostrando videos " << endl;
-                    for(auto ptr_video: videosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
-                        cout << ptr_video->muestraDatos() << endl;
+                    cout << "\nMostrando videos (De calificacion mayor a menor):\n" << endl;
+                    sort(videosAMostrar.begin(),videosAMostrar.end(), cmpVideos); //Ordenar videos por calificacion ascendente
+                    for(int i=0; i < videosAMostrar.size();i++){
+                        cout << videosAMostrar[i]->muestraDatos() << endl; // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
+                    }
                 }
                 else{
                     cout << "No hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
@@ -515,28 +482,6 @@ int main()
                     cout << "La nueva calificacion es: " << temp[episodio-1]->getCalificacion() << endl;
 
                     cout << "Los cambios se han realizado"<<endl;
-                    
-                    // cout << "La calificacion actualizada debería ser: " << calificacion << endl;
-                    
-                    // cout << "Vector Series"<<endl;
-                    // cout << "Calificacion: " << series[serie -1].getEpisodios()[episodio-1]->getCalificacion() << endl;
-                    // cout << "Vector Episodios"<<endl; 
-                    // for(int i = 0; i < episodios.size(); i++)
-                    // {
-                    //     if(episodios[i]->getID() == series[serie -1].getEpisodios()[episodio-1]->getID())
-                    //     {
-                    //         cout << "Calificacion: " << episodios[i]->getCalificacion() << endl;
-                    //     }
-                    // }
-                    
-                    // cout << "Vector Videos"<<endl; 
-                    // for(int i = 0; i < videos.size(); i++)
-                    // {
-                    //     if(videos[i]->getID() == series[serie -1].getEpisodios()[episodio-1]->getID())
-                    //     {
-                    //         cout << "Calificacion: " << videos[i]->getCalificacion() << endl;
-                    //     }
-                    // }
 
                 } else if(opcionCalif == 2)
                 {
@@ -561,10 +506,6 @@ int main()
                     cout << "Los cambios se han realizado"<<endl;
 
                 } 
-                // guardar el episodio que indique el usuario mediante el uso de getId - "Enumeracion mejor"
-                // Usar lo de loslimites para manejar el rango de la calificacion
-                // usar un loop para buscar el ID en el vector videos y cyando lo encuentre, usar un setCalificacion
-                // Actualizar la calificacion en el archivo .csv (REVISAR)
             }
             else
             {
@@ -574,6 +515,7 @@ int main()
 
         else if(opcion==6) // Salir
         {
+            cout << "Adios!"<< endl;
             ciclarMenu = 0;
 
         } 

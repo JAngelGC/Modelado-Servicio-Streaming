@@ -18,7 +18,10 @@ public:
     string getNombre();
     string getDuracion();
     string getGenero();
-    string getCalificacion(); 
+    string getCalificacion();
+    //Sobre carga de operadores para comparar Videos
+    friend bool operator>(const Video&, const Video&);
+    bool cmpVideos(const Video*,const Video*);
     void setCalificacion(string);
     virtual string muestraDatos() = 0;
     // virtual ~Video();
