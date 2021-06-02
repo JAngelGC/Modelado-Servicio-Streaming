@@ -148,8 +148,6 @@ vector<Episodio *> cargarEpisodios(vector<Serie> &series)
             {
                 string epId = episodios[j]->getID();
                 string sId = series[i].getID();
-                // cout << "El Id del episodio es: " << epId << endl;
-                // cout << "El Id de la serie es: " << sId << endl;
                 if (epId == sId)
                 {
                     episodios_Serie.push_back(episodios[j]);
@@ -251,7 +249,6 @@ int main()
         cout << "*********** T I T U L O  D E L  P R O G R A M A ***********" << endl;
         cout << "Texto de bienvenida" << endl;
 
-        // int *ptr_archivos = &hayArchivos;
         cout << "1. Cargar archivo de datos" << endl;
         cout << "2. Mostrar los videos en general con una cierta calificación o de un cierto género" << endl;
         cout << "3. Mostrar los episodios de una determinada serie con una calificacion determinada" << endl;
@@ -274,10 +271,6 @@ int main()
             videos = cargarVideos(peliculas, episodios);
             generos = {"Accion", "Drama", "Misterio"}; // OJO: ESTO SE DEBE DINAMIZAR
             hayArchivos = 1;
-
-            // cout << "Mostrando episodios de Game of Thrones: " << endl;
-            // for(auto ptr_episodio : series[0].getEpisodios())
-            //     cout << ptr_episodio->muestraDatos() << endl;
         }
 
         else if (opcion == 2) // 2. Mostrar los videos en general con una cierta calificación o de un cierto género
@@ -302,7 +295,6 @@ int main()
                     double calificacion; // Variable que guarda la calificacion que el user desea buscar
                     cin >> calificacion;
 
-                    cout << "\nMostrando videos: " << endl << endl;
                     for(auto ptr_video : videos){ // Se itera en el ciclo en busca de la calificacion del user
                         if(ptr_video->getCalificacion()==calificacion){
                             videosAMostrar.push_back(ptr_video);
@@ -320,7 +312,6 @@ int main()
                     int genero;         // Se guarda el genero que haya escogido el user
                     genero = verificarRango(genero, 1, generos.size());
 
-                    cout << "\nMostrando videos: " << endl << endl;
                     for(auto ptr_video : videos){ // Se itera en el ciclo en busca el genero del user
                         if(ptr_video->getGenero()==generos[genero-1])
                             videosAMostrar.push_back(ptr_video);
@@ -328,25 +319,14 @@ int main()
                     }
                 }
 
-                for(auto ptr_video: videosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
-                    cout << ptr_video->muestraDatos() << endl;
-
-                if(hayVideos==0) // En caso de que no haya videos, se imprime el mensaje
-                        cout << "No hay videos con la calificacion ingresada" << endl;
-
-                // Ejecurando esta parte
-                // Preguntar si lo quieres ver con genero o por calificacion
-                // 1 Genero
-                // 2 Calif
-                // crear un metodo sobrecargado que recibe una entrada que puede ser genero(string) o calificacion(double)
-                // Si es genero, mostrar los generos disponibles
-                // A lo mejor crear variables para cada genero
-                // empezar iteracion
-                // Llamar al vector videos en el caso del string buscar el getGenero y verificarlo con la entrada
-                // Crear un vector tempoarl para guardar todos los videos que cumplen el igual
-                // Mostrar el vector temporal
-                // Hacer lo correspondiente con calificacion, y manejar los limites de calificacion (decir que solo un decimal)
-                // Si no hay ningun video, imprimir que no hay resultados
+                if(hayVideos==1){
+                    cout << "\nMostrando videos " << endl;
+                    for(auto ptr_video: videosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
+                        cout << ptr_video->muestraDatos() << endl;
+                }
+                else{
+                    cout << "No hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
+                }
             }
             else
             {
@@ -387,12 +367,14 @@ int main()
                     }
                 }
                 
-                cout << "\nMostrando videos: " << endl << endl;
-                for(auto ptr_episodio: episodiosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
-                    cout << ptr_episodio->muestraDatos() << endl;
-
-                if(hayEpisodios==0) // En caso de que no haya videos, se imprime el mensaje
-                        cout << "No hay videos con la calificacion ingresada" << endl;
+                if(hayEpisodios==1){
+                    cout << "\nMostrando videos " << endl;
+                    for(auto ptr_video: episodiosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
+                        cout << ptr_video->muestraDatos() << endl;
+                }
+                else{
+                    cout << "No hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
+                }
 
             }
             else
