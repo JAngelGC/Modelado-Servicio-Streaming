@@ -181,6 +181,9 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 {
     vector<Video *> videos;
     videos.reserve(peliculas.size() + episodios.size());
+    //SOBRECARGA DE OPERADOS
+    //videos = peliculas + episodios;
+    //return = videos;
     videos.insert(videos.end(), peliculas.begin(), peliculas.end());
     videos.insert(videos.end(), episodios.begin(), episodios.end());
 
@@ -197,6 +200,8 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 // vector <string> cargarGeneros(vector<Video *> videos)
 
 //Funcion para aceptar solo int's
+
+//forzar tipo de dato (Sobrecarga)
 int forzarInt() {
   int valInt;
   cin >> valInt;
