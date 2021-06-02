@@ -8,6 +8,7 @@ string Video::getID()
     return m_id;
 }
 
+
 string Video::getNombre()
 {
     return m_nombre;
@@ -23,12 +24,12 @@ string Video::getGenero()
     return m_genero;
 }
 
-double Video::getCalificacion()
+string Video::getCalificacion()
 {
     return m_calificacion;
 }
 
-void Video::setCalificacion(double calificacion)
+void Video::setCalificacion(string calificacion)
 {
     m_calificacion = calificacion;
 }

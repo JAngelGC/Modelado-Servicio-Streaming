@@ -11,15 +11,20 @@ protected:
     string m_nombre;
     string m_duracion;
     string m_genero;
-    double m_calificacion;
+    string m_calificacion;
 
 public:
     string getID();
     string getNombre();
     string getDuracion();
     string getGenero();
+<<<<<<< HEAD
     double getCalificacion();
     void setCalificacion(double);
+=======
+    string getCalificacion(); 
+    void setCalificacion(string);
+>>>>>>> Menu-4-5
     virtual string muestraDatos() = 0;
     // virtual ~Video();
 };

@@ -9,7 +9,7 @@ using namespace std;
 class Pelicula: public Video
 {
     public:
-    Pelicula(string,string,string,string,double);
+    Pelicula(string,string,string,string,string);
     virtual string muestraDatos();
     // virtual ~Pelicula();
 
