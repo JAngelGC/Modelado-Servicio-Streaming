@@ -11,12 +11,8 @@ Episodio::Episodio(string id, string idEpisodio, string nombre, string duracion,
 
 }
 
-string Episodio::getID(){
+string Episodio::getIdEpisodio(){
     return m_idEpisodio;
-}
-
-string Episodio::getIdSerie(){
-    return m_id;
 }
 
 int Episodio::getTemporada(){

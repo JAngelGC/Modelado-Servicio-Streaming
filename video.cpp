@@ -3,6 +3,12 @@
 
 using namespace std;
 
+string Video::getID()
+{
+    return m_id;
+}
+
+
 string Video::getNombre()
 {
     return m_nombre;

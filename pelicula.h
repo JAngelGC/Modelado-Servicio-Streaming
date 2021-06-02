@@ -10,7 +10,6 @@ class Pelicula: public Video
 {
     public:
     Pelicula(string,string,string,string,string);
-    virtual string getID();
     virtual string muestraDatos();
     // virtual ~Pelicula();
 

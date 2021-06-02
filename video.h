@@ -14,7 +14,7 @@ class Video
     string m_calificacion;
 
     public:
-    virtual string getID() = 0;
+    string getID();
     string getNombre();
     string getDuracion();
     string getGenero();

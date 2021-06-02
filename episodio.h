@@ -12,8 +12,7 @@ class Episodio : public Video{
 
     public:
         Episodio(string,string,string,string,string,int);
-        virtual string getID();
-        string getIdSerie();
+        string getIdEpisodio();
         int getTemporada();
         void setGenero(string);
         virtual string muestraDatos();

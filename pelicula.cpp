@@ -12,11 +12,6 @@ Pelicula::Pelicula(string id, string nombre,string duracion,string genero, strin
     m_calificacion = calificacion;
 }
 
-string Pelicula::getID()
-{
-    return m_id;
-}
-
 string Pelicula::muestraDatos()
 {
     string str = "Nombre de la Pelicula: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + m_calificacion + "\n";

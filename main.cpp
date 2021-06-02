@@ -119,7 +119,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie>& series)
         {
             for (int j = 0; j < episodios.size(); j++)
             {
-                string epId = episodios[j]->getIdSerie();
+                string epId = episodios[j]->getID();
                 string sId = series[i].getID();
                 if (epId == sId)
                 {
@@ -141,7 +141,7 @@ vector<Episodio *> cargarEpisodios(vector<Serie>& series)
             vector<Episodio *> episodios_Serie;
             for (int j = 0; j < episodios.size(); j++)
             {
-                string epId = episodios[j]->getIdSerie();
+                string epId = episodios[j]->getID();
                 string sId = series[i].getID();
                 if (epId == sId)
                 {
@@ -220,17 +220,19 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 //   return valor;
 // }
 
+//Funcion para modificar archivos episodios
 void modificarArchivoEpisodios(vector<Episodio *> v)
 {
     ofstream ofs("ProyectoIntegrador-Episodios.csv", ofstream::trunc);
     for(int i = 0; i < v.size();i++)
     {
-        string str = v[i]->getIdSerie() + ";" + v[i]->getID() + ";" + v[i]->getNombre() + ";" + v[i]->getDuracion() + ";" + v[i]->getCalificacion() + ";" + to_string(v[i]->getTemporada()) + "\n";
+        string str = v[i]->getID() + ";" + v[i]->getIdEpisodio() + ";" + v[i]->getNombre() + ";" + v[i]->getDuracion() + ";" + v[i]->getCalificacion() + ";" + to_string(v[i]->getTemporada()) + "\n";
         ofs << str;
     }
     ofs.close();
 }
 
+//Funcion para modificar archivos peliculas
 void modificarArchivoPeliculas(vector<Pelicula *> v)
 {
     ofstream ofs("ProyectoIntegrador-Peliculas.csv", ofstream::trunc);
@@ -276,16 +278,8 @@ int main()
         {
             cout << "Estas en la opcion 1" << endl;
             series = cargarSeries();
-            for (int i =0; i < series.size();i++)
-            {
-                cout<< "Serie: " << series[i].getNombre() << " ,Episodios: " << series[i].getEpisodios().size() <<endl;
-            }
             peliculas = cargarPeliculas();
             episodios = cargarEpisodios(series);
-            for (int i =0; i < series.size();i++)
-            {
-                cout<< "Serie: " << series[i].getNombre() << " ,Episodios: " << series[i].getEpisodios().size() <<endl;
-            }
             videos = cargarVideos(peliculas, episodios);
             hayArchivos = 1;
         }
@@ -342,6 +336,8 @@ int main()
                 double calif;
                 cout << "Introduce la calificacion a buscar: ";
                 cin >> calif;
+
+                // Limites y Forzar Int
                 
                 vector<Pelicula *> temp;
                 for(int i = 0;i< peliculas.size();i++)
@@ -356,6 +352,7 @@ int main()
 
                 if(temp.size() > 0)
                 {
+                    //Imprime todas las peliculas con la calificacion
                     cout << "Estas son las peliculas con una calificacion de: " << calif << endl;
                     for(int i = 0; i < temp.size();i++)
                     {
@@ -381,6 +378,9 @@ int main()
                 int opcionCalif;
                 cout << "Calificar:\n1. Episodio de una Serie\n2. Pelicula\n\nIngresa el numero de la opcion deseada: ";
                 cin >> opcionCalif;
+
+                //forzar Int y limites
+
                 // mostrar lo que sea el caso
                 if(opcionCalif == 1)
                 {
@@ -388,28 +388,41 @@ int main()
                     cout << "Estas son las series disponibles: " << endl;
                     for(int i = 0; i < series.size(); i++)
                     {
+                        //Imprime las series
                         cout << i+1 << ". " << series[i].getNombre() << endl;
                     }
                     cout << "Elige la opcion de tu gusto: ";
                     cin >> serie;
+
+                     //forzarInt y limites
+
                     cout << "Estos son los episodios de " << series[serie-1].getNombre() <<": "<< endl;
-                    // cout << series[serie-1].getEpisodios().size()<< endl;
                     vector <Episodio *> temp = series[serie-1].getEpisodios();
                     for(int i = 0; i < temp.size(); i++)
                     {
+                        //Imprime nombres de los episodios y su calificacion de la serie seleccionada
                         cout << i+1 << ". " << temp[i]->getNombre() << ", Calificacion: "<< temp[i]->getCalificacion() << endl;
                     }
                     int episodio;
                     cout << "Elige el episodio  a calificar: ";
                     cin >> episodio;
+
+                    //forzarInt y limites
                     
+                    //Muestra calificacion original del episodio antes de modificar
                     cout << "La calificacion actual del episodio es de: " << temp[episodio-1]->getCalificacion() << endl;
                     string calificacion;
+
+                    //forzarInt convierte string a double solo para verificar rango deseado
+
                     cout << "Introduce la nueva calificacion: ";
                     cin >> calificacion;
                     series[serie -1].getEpisodios()[episodio-1]->setCalificacion(calificacion);
                     
+                    //Cambia el archivo episodio y requiere el vector episodio modificado para poder a escribir el archivo csv
                     modificarArchivoEpisodios(episodios);
+
+                    cout << "La nueva calificacion es: " << temp[episodio-1]->getCalificacion() << endl;
 
                     cout << "Los cambios se han realizado"<<endl;
                     
@@ -452,6 +465,8 @@ int main()
                     peliculas[pelicula-1]->setCalificacion(calificacion);
 
                     modificarArchivoPeliculas(peliculas);
+
+                    cout << "La nueva calificacion de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
 
                     cout << "Los cambios se han realizado"<<endl;
 
