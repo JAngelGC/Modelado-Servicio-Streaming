@@ -6,22 +6,20 @@ using namespace std;
 
 class Video
 {
-    protected:
+protected:
     string m_id;
     string m_nombre;
     string m_duracion;
     string m_genero;
     double m_calificacion;
 
-    public:
+public:
     string getID();
     string getNombre();
     string getDuracion();
     string getGenero();
-    double getCalificacion(); 
+    double getCalificacion();
     void setCalificacion(double);
     virtual string muestraDatos() = 0;
-    // virtual ~Video(); 
-
+    // virtual ~Video();
 };
-

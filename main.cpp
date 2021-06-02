@@ -8,6 +8,9 @@
 #include <fstream>
 #include <string.h>
 
+#include <limits> // Aqui va el include para que funcione el forzarInt();
+// #undef max
+
 using namespace std;
 
 vector<Serie> cargarSeries()
@@ -85,7 +88,8 @@ vector<Pelicula *> cargarPeliculas()
     return peliculas;
 }
 
-vector<Episodio *> cargarEpisodios(vector<Serie> series)
+// IMPORTANTE: El vector series se debe pasar como referencia para que se modifiquen sus elementos
+vector<Episodio *> cargarEpisodios(vector<Serie> &series)
 {
     vector<Episodio *> episodios;
     string str;
@@ -144,6 +148,8 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
             {
                 string epId = episodios[j]->getID();
                 string sId = series[i].getID();
+                // cout << "El Id del episodio es: " << epId << endl;
+                // cout << "El Id de la serie es: " << sId << endl;
                 if (epId == sId)
                 {
                     episodios_Serie.push_back(episodios[j]);
@@ -152,6 +158,8 @@ vector<Episodio *> cargarEpisodios(vector<Serie> series)
 
             series[i].setEpisodios(episodios_Serie);
         }
+
+        
 
         // cout << "Series y Episodios:\n"<< "Series:\n" <<endl;
 
@@ -188,38 +196,43 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
     return videos;
 }
 
+// Se puede crear una funcion que guarde los generos
+// vector <string> cargarGeneros(vector<Video *> videos)
+
 //Funcion para aceptar solo int's
-// int forzarInt() {
-//   int valInt;
-//   cin >> valInt;
+int forzarInt() {
+  int valInt;
+  cin >> valInt;
 
-//   while (true) {
-//     if (cin.fail()){
-//       cin.clear();
-//       cin.ignore(numeric_limits<streamsize>::max(), '\n');
-//       cout << "--Ingresar solo valores numericos. Trata de nuevo--\n";
-//       cin >> valInt;
-//       cout << endl;
-//     }
-//     else{
-//       return valInt;
-//       break;
-//     }
-//     }
-// }
+  while (true) {
+    if (cin.fail()){
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "--Ingresar solo valores numericos. Trata de nuevo--\n";
+      cin >> valInt;
+      cout << endl;
+    }
+    else{
+      return valInt;
+      break;
+    }
+    }
+}
 
-// //Funcion para verificar el rango de un valor
-// int verificarRango(int valor, int menor, int mayor){
-//   while(1){
-//     valor = forzarInt();
-//     if(valor>=menor && valor<=mayor){
-//       break;
-//     }else{
-//       cout << "Valor ingresado fuera del rango. Intenta de nuevo" <<endl;
-//     }
-//   }
-//   return valor;
-// }
+//Funcion para verificar el rango de un valor
+int verificarRango(int valor, int menor, int mayor){
+  while(1){
+    valor = forzarInt();
+    if(valor>=menor && valor<=mayor){
+      break;
+    }else{
+      cout << "Valor ingresado fuera del rango. Intenta de nuevo" <<endl;
+    }
+  }
+  return valor;
+}
+
+
 
 int main()
 {
@@ -228,13 +241,14 @@ int main()
     vector<Pelicula *> peliculas;
     vector<Episodio *> episodios;
     vector<Video *> videos;
+    vector <string> generos; // OJO: ESTO SE DEBE DINAMIZAR
 
     bool ciclarMenu = 1;
     int hayArchivos = 0;
     while (ciclarMenu)
     {
 
-        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********";
+        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********" << endl;
         cout << "Texto de bienvenida" << endl;
 
         // int *ptr_archivos = &hayArchivos;
@@ -246,11 +260,11 @@ int main()
         cout << "6. Salir" << endl;
 
         cout << "Ingresa la opcion del menu que te interese: ";
-        // int opcion = forzarInt();
-        int opcion;
-        cin >> opcion;
+        int opcion = forzarInt();
 
-        cout << "Valor de hayArchivos: " << hayArchivos << endl;
+
+
+
         if (opcion == 1)
         {
             cout << "Estas en la opcion 1" << endl;
@@ -258,13 +272,68 @@ int main()
             peliculas = cargarPeliculas();
             episodios = cargarEpisodios(series);
             videos = cargarVideos(peliculas, episodios);
+            generos = {"Accion", "Drama", "Misterio"}; // OJO: ESTO SE DEBE DINAMIZAR
             hayArchivos = 1;
+
+            // cout << "Mostrando episodios de Game of Thrones: " << endl;
+            // for(auto ptr_episodio : series[0].getEpisodios())
+            //     cout << ptr_episodio->muestraDatos() << endl;
         }
-        else if (opcion == 2)
+
+        else if (opcion == 2) // 2. Mostrar los videos en general con una cierta calificación o de un cierto género
         {
             if (hayArchivos == 1)
             {
-                cout << "Estas en la opcion 2" << endl;
+                cout << "\nHas selecionado la opcion 2" << endl;
+
+                cout << "\n¿Quieres ver videos por calificacion o por genero?" << endl;
+                cout << "1. Calificacion" << endl;
+                cout << "2. Genero" << endl;
+
+                cout << "\nIngresa el numero de la opcion que desees: ";
+                int opcionMenu2;
+                opcionMenu2 = verificarRango(opcionMenu2, 1, 2);
+
+                vector<Video *> videosAMostrar; //Aqui se van a guardar los videos que cumplan la condicion
+                bool hayVideos = 0; // Variable que permite verificar si hay videos o no con la califacion
+
+                if(opcionMenu2==1){ // User escogio ver videos por calificacion
+                    cout << "Ingresa la calificacion de la cual deseas buscar videos: ";
+                    double calificacion; // Variable que guarda la calificacion que el user desea buscar
+                    cin >> calificacion;
+
+                    cout << "\nMostrando videos: " << endl << endl;
+                    for(auto ptr_video : videos){ // Se itera en el ciclo en busca de la calificacion del user
+                        if(ptr_video->getCalificacion()==calificacion){
+                            videosAMostrar.push_back(ptr_video);
+                            hayVideos = 1; // Si hay videos
+                        } 
+                    }
+                } 
+                else if(opcionMenu2==2){ // User escogio ver videos por genero
+
+                    cout << "\nLista de generos disponibles:" << endl;
+                    for(int i=0; i<generos.size(); i++) // Se muestran los generos disponibles
+                        cout << i+1 << "." << generos[i] << endl;
+                    
+                    cout << "\nIngrese el genero del cual deseas buscar videos: ";
+                    int genero;         // Se guarda el genero que haya escogido el user
+                    genero = verificarRango(genero, 1, generos.size());
+
+                    cout << "\nMostrando videos: " << endl << endl;
+                    for(auto ptr_video : videos){ // Se itera en el ciclo en busca el genero del user
+                        if(ptr_video->getGenero()==generos[genero-1])
+                            videosAMostrar.push_back(ptr_video);
+                            hayVideos = 1; // Si hay videos
+                    }
+                }
+
+                for(auto ptr_video: videosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
+                    cout << ptr_video->muestraDatos() << endl;
+
+                if(hayVideos==0) // En caso de que no haya videos, se imprime el mensaje
+                        cout << "No hay videos con la calificacion ingresada" << endl;
+
                 // Ejecurando esta parte
                 // Preguntar si lo quieres ver con genero o por calificacion
                 // 1 Genero
@@ -284,25 +353,54 @@ int main()
                 cout << "No han cargado los archivos" << endl;
             }
         }
-        else if (opcion == 3)
+        
+        else if (opcion == 3) // Mostrar los episodios de una determinada serie con una calificacion determinada
         {
             if (hayArchivos)
             {
-                cout << "Estas en la opcion 3" << endl;
-                // Preguntar que serie quiere ver
-                // Mostrar en que serie estamos
-                // Preguntar la calificacion de los episodios que quiere ver
-                // getEpisodios() regresar el vector de episodios de la serie
-                // iterar en el vector la calificacion que ingresen
-                // usar un vector temporal y guardar los episodios que cumplen la condicion
-                // mostrar ese vector con un loop
-                // Mostrar nada si no hay
+                cout << "\nHas seleccionado opcion 3" << endl;
+
+                cout << "\nA continuacion se muestan las series: " << endl << endl; // Se muestran las series que hay
+                for(int i=0; i<series.size(); i++)
+                    cout << i+1 << ". " << series[i].mostrarDatos() << endl;
+
+                cout << "Ingresa el numero de la serie que desees: " ;
+                int opcionSerie;
+                opcionSerie = verificarRango(opcionSerie, 1, series.size());
+
+                cout << "\nSeleccionaste: " << endl;
+                cout << series[opcionSerie-1].mostrarDatos() << endl; // Se muestra la serie que escogio el user
+                cout << "Ahora selecciona la calificacion a buscar en dicha serie: " ;
+                double calificacion;     // La calificacion que servira para buscar episodios en la serie
+                cin >> calificacion;
+
+                vector <Episodio *> episodiosAMostrar; // Vector en donde se guardaran los episodios a mostrar
+                bool hayEpisodios = 0; // Variable que permite verificar si hay videos o no con la califacion
+
+                // Vector que guarda los episodios de la serie seleccionada
+                vector<Episodio *> episodiosSerie = series[opcionSerie-1].getEpisodios();
+
+                for(auto ptr_episodio: episodiosSerie){ // Se guardan los episodios de la serie que tengan la calificacion que pide el user
+                    if(ptr_episodio->getCalificacion()==calificacion){
+                        episodiosAMostrar.push_back(ptr_episodio);
+                        hayEpisodios = 1;
+                    }
+                }
+                
+                cout << "\nMostrando videos: " << endl << endl;
+                for(auto ptr_episodio: episodiosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
+                    cout << ptr_episodio->muestraDatos() << endl;
+
+                if(hayEpisodios==0) // En caso de que no haya videos, se imprime el mensaje
+                        cout << "No hay videos con la calificacion ingresada" << endl;
+
             }
             else
             {
                 cout << "No han cargado los archivos" << endl;
             }
         }
+
         else if (opcion == 4)
         {
             if (hayArchivos)
@@ -319,6 +417,7 @@ int main()
                 cout << "No han cargado los archivos" << endl;
             }
         }
+
         else if (opcion == 5)
         {
             if (hayArchivos)
@@ -335,13 +434,19 @@ int main()
             {
                 cout << "No han cargado los archivos" << endl;
             }
-        } else if(opcion==6){
+        } 
+
+        else if(opcion==6){
             ciclarMenu = 0;
 
-        } else{
+        } 
+        
+        else{
             cout << "Valor ingresado invalida" << endl;
             cout << "Trata de nuevo" << endl;  
         }
+
+        cout << endl;
 
     } // Cierre del ciclo del menu principal
 
