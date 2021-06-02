@@ -294,7 +294,7 @@ int main()
             hayArchivos = 1;
         }
 
-        else if (opcion == 2) // 2. Mostrar los videos en general con una cierta calificación o de un cierto género
+        else if (opcion == 2) // Mostrar los videos en general con una cierta calificación o de un cierto género
         {
             if (hayArchivos == 1)
             {
@@ -410,7 +410,7 @@ int main()
             }
         }
 
-        else if (opcion == 4)
+        else if (opcion == 4) // Mostrar las peliculas con cierta calificacion
         {
             if (hayArchivos)
             {
@@ -453,8 +453,8 @@ int main()
                 cout << "No han cargado los archivos" << endl;
             }
         }
-
-        else if (opcion == 5)
+        
+        else if (opcion == 5) // Calificar un video
         {
             if (hayArchivos)
             {
@@ -567,7 +567,8 @@ int main()
             }
         } 
 
-        else if(opcion==6){
+        else if(opcion==6) // Salir
+        {
             ciclarMenu = 0;
 
         } 
