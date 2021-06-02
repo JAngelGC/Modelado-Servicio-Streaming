@@ -18,13 +18,8 @@ public:
     string getNombre();
     string getDuracion();
     string getGenero();
-<<<<<<< HEAD
-    double getCalificacion();
-    void setCalificacion(double);
-=======
     string getCalificacion(); 
     void setCalificacion(string);
->>>>>>> Menu-4-5
     virtual string muestraDatos() = 0;
     // virtual ~Video();
 };

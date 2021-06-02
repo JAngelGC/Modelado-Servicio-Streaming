@@ -24,11 +24,7 @@ void Episodio::setGenero(string genero){
 }
 
 string Episodio::muestraDatos(){
-<<<<<<< HEAD
-    string var_mostrar = "Nombre del Episodio: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + to_string(m_calificacion) + ", Temporada: " + to_string(m_temporada) + "ID-Episodio: " + m_idEpisodio + "\n";
-=======
     string var_mostrar = "Nombre del Episodio: " + m_nombre + ", " + "Duracion: " + m_duracion + " hrs, " + "Genero: " + m_genero + ", " + "Calificacion: " + m_calificacion + ", Temporada: " + to_string(m_temporada) + "\n";
->>>>>>> Menu-4-5
     return var_mostrar;
 }
 

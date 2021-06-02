@@ -87,12 +87,8 @@ vector<Pelicula *> cargarPeliculas()
     return peliculas;
 }
 
-<<<<<<< HEAD
 // IMPORTANTE: El vector series se debe pasar como referencia para que se modifiquen sus elementos
 vector<Episodio *> cargarEpisodios(vector<Serie> &series)
-=======
-vector<Episodio *> cargarEpisodios(vector<Serie>& series)
->>>>>>> Menu-4-5
 {
     vector<Episodio *> episodios;
     string str;
@@ -233,8 +229,6 @@ int verificarRango(int valor, int menor, int mayor){
   return valor;
 }
 
-
-
 //Funcion para modificar archivos episodios
 void modificarArchivoEpisodios(vector<Episodio *> v)
 {
@@ -289,10 +283,6 @@ int main()
 
 
 
-<<<<<<< HEAD
-=======
-        // cout << "Valor de hayArchivos: " << hayArchivos << endl;
->>>>>>> Menu-4-5
         if (opcion == 1)
         {
             cout << "Estas en la opcion 1" << endl;
@@ -323,7 +313,10 @@ int main()
 
                 if(opcionMenu2==1){ // User escogio ver videos por calificacion
                     cout << "Ingresa la calificacion de la cual deseas buscar videos: ";
-                    double calificacion; // Variable que guarda la calificacion que el user desea buscar
+                    
+                    //CORREGIRRRRRRRRR!!!!!!!!!!! [IMPLEMENTAR LIMITES CON STRING]
+
+                    string calificacion; // Variable que guarda la calificacion que el user desea buscar
                     cin >> calificacion;
 
                     for(auto ptr_video : videos){ // Se itera en el ciclo en busca de la calificacion del user
@@ -382,7 +375,7 @@ int main()
                 cout << "\nSeleccionaste: " << endl;
                 cout << series[opcionSerie-1].mostrarDatos() << endl; // Se muestra la serie que escogio el user
                 cout << "Ahora selecciona la calificacion a buscar en dicha serie: " ;
-                double calificacion;     // La calificacion que servira para buscar episodios en la serie
+                string calificacion;     // La calificacion que servira para buscar episodios en la serie
                 cin >> calificacion;
 
                 vector <Episodio *> episodiosAMostrar; // Vector en donde se guardaran los episodios a mostrar
@@ -392,6 +385,9 @@ int main()
                 vector<Episodio *> episodiosSerie = series[opcionSerie-1].getEpisodios();
 
                 for(auto ptr_episodio: episodiosSerie){ // Se guardan los episodios de la serie que tengan la calificacion que pide el user
+                    
+                    //CORREGIRRRRRRRRR!!!!!!!!!!! [IMPLEMENTAR LIMITES CON STRING]
+
                     if(ptr_episodio->getCalificacion()==calificacion){
                         episodiosAMostrar.push_back(ptr_episodio);
                         hayEpisodios = 1;
@@ -569,7 +565,6 @@ int main()
             {
                 cout << "No han cargado los archivos" << endl;
             }
-<<<<<<< HEAD
         } 
 
         else if(opcion==6){
@@ -578,15 +573,6 @@ int main()
         } 
         
         else{
-=======
-        }
-        else if (opcion == 6)
-        {
-            ciclarMenu = 0;
-        }
-        else
-        {
->>>>>>> Menu-4-5
             cout << "Valor ingresado invalida" << endl;
             cout << "Trata de nuevo" << endl;
         }

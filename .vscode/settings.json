@@ -1,10 +1,7 @@
 {
     "files.associations": {
         "iostream": "cpp",
-<<<<<<< HEAD
-        "ostream": "cpp"
-=======
+        "ostream": "cpp",
         "iosfwd": "cpp"
->>>>>>> Menu-4-5
     }
 }
