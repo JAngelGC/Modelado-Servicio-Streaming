@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Pelicula::Pelicula(string id, string nombre,string duracion,string genero, string calificacion)
+Pelicula::Pelicula(string id, string nombre, string duracion, string genero, string calificacion)
 {
     m_id = id;
     m_nombre = nombre;
