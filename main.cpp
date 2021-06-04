@@ -29,8 +29,7 @@ vector<Serie> cargarSeries()
 
             int i = 0;
 
-            while (i < 4 && getline(ss, line[i++], ';'))
-                ;
+            while (i < 4 && getline(ss, line[i++], ';'));
 
             Serie s(
                 line[0],
@@ -210,6 +209,8 @@ double verificarRango(int valor, int menor, int mayor){
       break;
     }else{
       cout << "--Valor ingresado fuera del rango. Intenta de nuevo--" <<endl;
+    }
+    
     }
     return valor;
 }
@@ -417,8 +418,7 @@ int main()
                 // Vector que guarda los episodios de la serie seleccionada
                 vector<Episodio *> episodiosSerie = series[opcionSerie - 1].getEpisodios();
 
-                for (auto ptr_episodio : episodiosSerie)
-                { // Se guardan los episodios de la serie que tengan la calificacion que pide el user
+                // Se guardan los episodios de la serie que tengan la calificacion que pide el user
 
                 for(auto ptr_episodio: episodiosSerie){ // Se guardan los episodios de la serie que tengan la calificacion que pide el user
 
@@ -443,6 +443,7 @@ int main()
             {
                 cout << "\nNo han cargado los archivos" << endl;
             }
+        
         }
 
         else if (opcion == 4) // Mostrar las peliculas con cierta calificacion
