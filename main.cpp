@@ -9,7 +9,6 @@
 #include <string.h>
 
 #include <limits> // Aqui va el include para que funcione el forzarInt();
-// #undef max
 
 using namespace std;
 
@@ -199,9 +198,7 @@ vector<Video *> cargarVideos(vector<Pelicula *> peliculas, vector<Episodio *> ep
 // Se puede crear una funcion que guarde los generos
 // vector <string> cargarGeneros(vector<Video *> videos)
 
-//Funcion para aceptar solo int's
-
-//forzar tipo de dato (Sobrecarga)
+//Funcion para aceptar solo int's   // SE PUEDE BORRAR
 int forzarInt() {
   int valInt;
   cin >> valInt;
@@ -210,7 +207,7 @@ int forzarInt() {
     if (cin.fail()){
       cin.clear();
       cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      cout << "--Ingresar solo valores numericos. Trata de nuevo--\n";
+      cout << "--Ingresar solo valores numericos. Intenta de nuevo--\n";
       cin >> valInt;
       cout << endl;
     }
@@ -221,18 +218,54 @@ int forzarInt() {
     }
 }
 
-//Funcion para verificar el rango de un valor
-int verificarRango(int valor, int menor, int mayor){
+//Funcion para aceptar solo double's
+double forzarDouble() {
+  double valDouble;
+  cin >> valDouble;
+
+  while (true) {
+    if (cin.fail()){
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "--Ingresar solo valores numericos. Intenta de nuevo--\n";
+      cin >> valDouble;
+      cout << endl;
+    }
+    else{
+      return valDouble;
+      break;
+    }
+    }
+}
+
+
+//Funcion para verificar el rango de un valor (Sobrecarga)
+double verificarRango(int valor, int menor, int mayor){
   while(1){
-    valor = forzarInt();
+    valor = forzarDouble();
     if(valor>=menor && valor<=mayor){
       break;
     }else{
-      cout << "Valor ingresado fuera del rango. Intenta de nuevo" <<endl;
+      cout << "--Valor ingresado fuera del rango. Intenta de nuevo--" <<endl;
     }
   }
   return valor;
 }
+
+//Funcion para verificar el rango de una calificacion (Sobrecarga)
+double verificarRango(double calificacion){
+  while(1){
+    calificacion = forzarDouble();
+    if(calificacion>=0 && calificacion<=10){
+      break;
+    }
+    else{
+        cout << "--Valor ingresado fuera del rango. Intenta de nuevo--" <<endl;
+    }
+  }
+  return calificacion;
+}
+
 
 //Funcion para modificar archivos episodios
 void modificarArchivoEpisodios(vector<Episodio *> v)
@@ -258,6 +291,12 @@ void modificarArchivoPeliculas(vector<Pelicula *> v)
     ofs.close();
 }
 
+//Funcion para separar las secciones en los menus
+void espaciado(){
+    cout << "\n--------------------------------------------" << endl;
+}
+
+
 int main()
 {
 
@@ -269,11 +308,12 @@ int main()
 
     bool ciclarMenu = 1;
     int hayArchivos = 0;
+
     while (ciclarMenu)
     {
 
-        cout << "*********** T I T U L O  D E L  P R O G R A M A ***********" << endl;
-        cout << "Texto de bienvenida" << endl;
+        cout << "\n*********** M O D E L A D O   D E   S E R V I C I O   D E   S T R E A M I N G ***********" << endl << endl;
+        cout << "Bienvenid@ a la aplicacion en donde podras buscar tus titulos favoritos" << endl << endl;
 
         cout << "1. Cargar archivo de datos" << endl;
         cout << "2. Mostrar los videos en general con una cierta calificacion o de un cierto genero" << endl;
@@ -283,26 +323,34 @@ int main()
         cout << "6. Salir" << endl;
 
         cout << "Ingresa la opcion del menu que te interese: ";
-        int opcion = forzarInt();
-
-
+        int opcion;
+        opcion = verificarRango(opcion, 1,6);
 
 
         if (opcion == 1)
         {
-            cout << "Estas en la opcion 1" << endl;
-            series = cargarSeries();
-            peliculas = cargarPeliculas();
-            episodios = cargarEpisodios(series);
-            videos = cargarVideos(peliculas, episodios);
-            generos = {"Accion", "Drama", "Misterio"}; // OJO: ESTO SE DEBE DINAMIZAR
-            hayArchivos = 1;
+            espaciado();
+
+            if(hayArchivos==0){
+                cout << "\nSe han cargado los archivos exitosamente" << endl;
+                series = cargarSeries();
+                peliculas = cargarPeliculas();
+                episodios = cargarEpisodios(series);
+                videos = cargarVideos(peliculas, episodios);
+                generos = {"Accion", "Drama", "Misterio"}; // OJO: ESTO SE DEBE DINAMIZAR
+                hayArchivos = 1;
+            }
+            else{
+                cout << "\nLos archivos ya estan cargados" << endl;
+            }            
         }
 
         else if (opcion == 2) // Mostrar los videos en general con una cierta calificación o de un cierto género
         {
+            espaciado();
             if (hayArchivos == 1)
             {
+                
                 cout << "\nHas selecionado la opcion 2" << endl;
 
                 cout << "\n¿Quieres ver videos por calificacion o por genero?" << endl;
@@ -319,10 +367,11 @@ int main()
                 if(opcionMenu2==1){ // User escogio ver videos por calificacion
                     cout << "Ingresa la calificacion de la cual deseas buscar videos: ";
                     
-                    //CORREGIRRRRRRRRR!!!!!!!!!!! [IMPLEMENTAR LIMITES CON STRING]
-
-                    string calificacion; // Variable que guarda la calificacion que el user desea buscar
-                    cin >> calificacion;
+                    double cali;
+                    cali = verificarRango(cali); // Se verifica que la calificacion del user sea correcta
+                    string calificacion = to_string(cali*1).substr(0,3); // Se convierte la calificacion del user a string
+                    // Explicar que te redondea la calificacion con un decimal
+                    cout << "\nLa calificacion que ingresaste es: " << calificacion << endl;
 
                     for(auto ptr_video : videos){ // Se itera en el ciclo en busca de la calificacion del user
                         if(ptr_video->getCalificacion()==calificacion){
@@ -349,39 +398,43 @@ int main()
                 }
 
                 if(hayVideos==1){
-                    cout << "\nMostrando videos " << endl;
+                    cout << "\nMostrando videos: " << endl;
                     for(auto ptr_video: videosAMostrar) // Aqui se muestran los videos que hayan sido encontrados por genero o por calificacion
                         cout << ptr_video->muestraDatos() << endl;
                 }
                 else{
-                    cout << "No hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
+                    cout << "\nNo hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
                 }
             }
             else
             {
                 cout << "No han cargado los archivos" << endl;
             }
-        }
+        } 
         
         else if (opcion == 3) // Mostrar los episodios de una determinada serie con una calificacion determinada
         {
+            espaciado();
             if (hayArchivos)
             {
                 cout << "\nHas seleccionado opcion 3" << endl;
 
                 cout << "\nA continuacion se muestan las series: " << endl << endl; // Se muestran las series que hay
                 for(int i=0; i<series.size(); i++)
-                    cout << i+1 << ". " << series[i].mostrarDatos() << endl;
+                    cout << i+1 << ". " << series[i].mostrarDatos();
 
-                cout << "Ingresa el numero de la serie que desees: " ;
+                cout << "\nIngresa el numero de la serie que desees: " ;
                 int opcionSerie;
                 opcionSerie = verificarRango(opcionSerie, 1, series.size());
 
                 cout << "\nSeleccionaste: " << endl;
                 cout << series[opcionSerie-1].mostrarDatos() << endl; // Se muestra la serie que escogio el user
                 cout << "Ahora selecciona la calificacion a buscar en dicha serie: " ;
-                string calificacion;     // La calificacion que servira para buscar episodios en la serie
-                cin >> calificacion;
+                
+                double cali;
+                cali = verificarRango(cali); // Se verifica que la calificacion del user sea correcta
+                string calificacion = to_string(cali*1).substr(0,3); // Se convierte la calificacion del user a string
+                cout << "\nLa calificacion que ingresaste es: " << calificacion << endl;
 
                 vector <Episodio *> episodiosAMostrar; // Vector en donde se guardaran los episodios a mostrar
                 bool hayEpisodios = 0; // Variable que permite verificar si hay videos o no con la califacion
@@ -390,8 +443,6 @@ int main()
                 vector<Episodio *> episodiosSerie = series[opcionSerie-1].getEpisodios();
 
                 for(auto ptr_episodio: episodiosSerie){ // Se guardan los episodios de la serie que tengan la calificacion que pide el user
-                    
-                    //CORREGIRRRRRRRRR!!!!!!!!!!! [IMPLEMENTAR LIMITES CON STRING]
 
                     if(ptr_episodio->getCalificacion()==calificacion){
                         episodiosAMostrar.push_back(ptr_episodio);
@@ -405,34 +456,41 @@ int main()
                         cout << ptr_video->muestraDatos() << endl;
                 }
                 else{
-                    cout << "No hay videos con la calificacion ingresada" << endl;// En caso de que no haya videos, se imprime el mensaje
+                    cout << "\nNo hay videos con la calificacion ingresada de: "<< calificacion << endl;// En caso de que no haya videos, se imprime el mensaje
                 }
 
             }
             else
             {
-                cout << "No han cargado los archivos" << endl;
+                cout << "\nNo han cargado los archivos" << endl;
             }
         }
 
         else if (opcion == 4) // Mostrar las peliculas con cierta calificacion
-        {
+        {   
+            espaciado();
             if (hayArchivos)
             {
-                cout << "Estas en la opcion 4" << endl;
+                cout << "\nEstas en la opcion 4" << endl;
                 // Preguntar la calificacion de la pelicula que quiere ver
                
-                double calif;
-                cout << "Introduce la calificacion a buscar: ";
-                cin >> calif;
+                // double calif;
+                cout << "\nIntroduce la calificacion a buscar: ";
+                // cin >> calif;
 
-                // Limites y Forzar Int
-                
+                // TODO BIEN******************************
+
+                double cali;
+                cali = verificarRango(cali); // Se verifica que la calificacion del user sea correcta
+                string calif = to_string(cali*1).substr(0,3); // Se convierte la calificacion del user a string
+                cout << "\nLa calificacion que ingresaste es: " << calif << endl;
+
                 vector<Pelicula *> temp;
                 for(int i = 0;i< peliculas.size();i++)
                 {
                     // llamar al vector peliculas y hacer un loop para verficar que lo que ingrese cumpla con una pelicula
-                    if(stod(peliculas[i]->getCalificacion()) == calif)
+                    // IMPORTANTE, se sustrae el salto de linea con substr
+                    if(peliculas[i]->getCalificacion().substr(0,3) == calif)
                     {
                          // ir guardando las peliculas que cumplan con la condicion en un vector temporal
                         temp.push_back(peliculas[i]);
@@ -450,7 +508,7 @@ int main()
                     }
                 } else {
                     // mostrar que no hay peliculas que cumplan con esa calificacion en caso contrario
-                    cout << "No se encontro ninguna pelicula con una calificacion de: " << calif << endl;
+                    cout << "\nNo se encontro ninguna pelicula con una calificacion de: " << calif << endl;
                 }         
             }
             else
@@ -461,58 +519,67 @@ int main()
         
         else if (opcion == 5) // Calificar un video
         {
+            espaciado();
             if (hayArchivos)
             {
-                cout << "Estas en la opcion 5" << endl;
+                cout << "\nEstas en la opcion 5" << endl;
                 // Preguntar si serie o pelicula
                 int opcionCalif;
-                cout << "Calificar:\n1. Episodio de una Serie\n2. Pelicula\n\nIngresa el numero de la opcion deseada: ";
-                cin >> opcionCalif;
+                cout << "\nCalificar:\n1. Episodio de una Serie\n2. Pelicula\n\nIngresa el numero de la opcion deseada: ";
+                opcionCalif = verificarRango(opcionCalif, 1, 2);
 
                 //forzar Int y limites
 
                 // mostrar lo que sea el caso
                 if(opcionCalif == 1)
                 {
-                    int serie;
-                    cout << "Estas son las series disponibles: " << endl;
+                    
+                    cout << "\nEstas son las series disponibles: " << endl;
                     for(int i = 0; i < series.size(); i++)
                     {
                         //Imprime las series
                         cout << i+1 << ". " << series[i].getNombre() << endl;
                     }
-                    cout << "Elige la opcion de tu gusto: ";
-                    cin >> serie;
+                    cout << "\nElige la opcion de tu gusto: ";
+                    int serie;
+                    serie = verificarRango(serie, 1, series.size());
 
                      //forzarInt y limites
 
-                    cout << "Estos son los episodios de " << series[serie-1].getNombre() <<": "<< endl;
+                    cout << "\nEstos son los episodios de " << series[serie-1].getNombre() <<": "<< endl;
                     vector <Episodio *> temp = series[serie-1].getEpisodios();
                     for(int i = 0; i < temp.size(); i++)
                     {
                         //Imprime nombres de los episodios y su calificacion de la serie seleccionada
                         cout << i+1 << ". " << temp[i]->getNombre() << ", Calificacion: "<< temp[i]->getCalificacion() << endl;
                     }
+                    
+                    cout << "\nElige el episodio  a calificar: ";
                     int episodio;
-                    cout << "Elige el episodio  a calificar: ";
-                    cin >> episodio;
+                    // El rango maximo de esta opcion depende de cuantos episodios tenga la serie
+                    episodio = verificarRango(episodio, 1, series[serie-1].getEpisodios().size() );
 
                     //forzarInt y limites
                     
                     //Muestra calificacion original del episodio antes de modificar
                     cout << "La calificacion actual del episodio es de: " << temp[episodio-1]->getCalificacion() << endl;
-                    string calificacion;
+                    
 
                     //forzarInt convierte string a double solo para verificar rango deseado
 
                     cout << "Introduce la nueva calificacion: ";
-                    cin >> calificacion;
+
+                    double cali;
+                    cali = verificarRango(cali); // Se verifica que la calificacion del user sea correcta
+                    string calificacion = to_string(cali*1).substr(0,3); // Se convierte la calificacion del user a string
+                    cout << "\nLa calificacion que ingresaste es: " << calificacion << endl;
+
                     series[serie -1].getEpisodios()[episodio-1]->setCalificacion(calificacion);
                     
                     //Cambia el archivo episodio y requiere el vector episodio modificado para poder a escribir el archivo csv
                     modificarArchivoEpisodios(episodios);
 
-                    cout << "La nueva calificacion es: " << temp[episodio-1]->getCalificacion() << endl;
+                    cout << "\nLa nueva calificacion es: " << temp[episodio-1]->getCalificacion() << endl;
 
                     cout << "Los cambios se han realizado"<<endl;
                     
@@ -540,23 +607,28 @@ int main()
 
                 } else if(opcionCalif == 2)
                 {
-                    int pelicula;
-                    cout << "Estas son las peliculas disponibles: " << endl;
+                    cout << "\nEstas son las peliculas disponibles: " << endl;
                     for(int i = 0; i < peliculas.size(); i++)
                     {
                         cout << i+1 << ". " << peliculas[i]->getNombre() << ", Calificacion: "<< peliculas[i]->getCalificacion() << endl;
                     }
-                    cout << "Elige la pelicula a calificar: ";
-                    cin >> pelicula;
-                    cout << "La calificacion actual de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
-                    string calificacion;
+                    cout << "\nElige la pelicula a calificar: ";
+                    int pelicula;
+                    pelicula = verificarRango(pelicula, 1, peliculas.size());
+                    cout << "\nLa calificacion actual de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
+                    
                     cout << "Introduce la nueva calificacion: ";
-                    cin >> calificacion;
+
+                    double cali;
+                    cali = verificarRango(cali); // Se verifica que la calificacion del user sea correcta
+                    string calificacion = to_string(cali*1).substr(0,3); // Se convierte la calificacion del user a string
+                    cout << "\nLa calificacion que ingresaste es: " << calificacion << endl;
+                    
                     peliculas[pelicula-1]->setCalificacion(calificacion);
 
                     modificarArchivoPeliculas(peliculas);
 
-                    cout << "La nueva calificacion de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
+                    cout << "\nLa nueva calificacion de la pelicula es de: " << peliculas[pelicula-1]->getCalificacion() << endl;
 
                     cout << "Los cambios se han realizado"<<endl;
 
@@ -574,6 +646,8 @@ int main()
 
         else if(opcion==6) // Salir
         {
+            cout << "\nGracias por utilizar la aplicacion" << endl;
+            cout << "Hasta luego" << endl;
             ciclarMenu = 0;
 
         } 
@@ -583,8 +657,9 @@ int main()
             cout << "Trata de nuevo" << endl;
         }
 
+        espaciado();
         cout << endl;
-
+        
     } // Cierre del ciclo del menu principal
 
     return 0;
