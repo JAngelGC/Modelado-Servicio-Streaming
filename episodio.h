@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "video.h"
+#include "Video.h"
 
 using namespace std;
 

@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
-#include "serie.cpp"
-#include "episodio.cpp"
-#include "video.cpp"
-#include "pelicula.cpp"
+#include "Serie.cpp"
+#include "Episodio.cpp"
+#include "Video.cpp"
+#include "Pelicula.cpp"
 #include <sstream>
 #include <fstream>
 #include <string.h>
@@ -251,6 +251,9 @@ void espaciado()
     cout << "\n--------------------------------------------" << endl;
 }
 
+
+
+// **************************************** M A I N ****************************************
 int main()
 {
 
@@ -592,6 +595,7 @@ int main()
 
         else if (opcion == 6) // Salir
         {
+            espaciado();
             cout << "\nGracias por utilizar la aplicacion" << endl;
             cout << "Hasta luego" << endl;
             ciclarMenu = 0;

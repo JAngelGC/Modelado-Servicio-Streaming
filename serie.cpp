@@ -1,4 +1,4 @@
-#include "serie.h"
+#include "Serie.h"
 #include <vector>
 
 Serie::Serie(string id, string nombre, string genero, int temporadas)

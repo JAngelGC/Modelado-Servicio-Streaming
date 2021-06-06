@@ -1,4 +1,4 @@
-#include "pelicula.h"
+#include "Pelicula.h"
 #include <iostream>
 
 using namespace std;

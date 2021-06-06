@@ -1,4 +1,4 @@
-#include "episodio.h"
+#include "Episodio.h"
 
 Episodio::Episodio(string id, string idEpisodio, string nombre, string duracion, string calificacion, int temporada)
 {
